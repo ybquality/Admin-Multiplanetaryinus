@@ -1,0 +1,27 @@
+// 路由
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+
+const routes: Array<RouteRecordRaw> = [
+    {
+        path: "/",
+        name: "Home",
+        component: () => import("../views/Home.vue")
+    },
+    {
+        path: "/register",
+        name: "Register",
+        component: () => import("../views/Register.vue")
+    },
+    {
+        path: "/:catchAll(.*)",
+        name: "404",
+        component: () => import("../views/404.vue")
+    },
+]
+
+const router = createRouter({
+    history: createWebHistory(),//去除/#/
+    routes
+})
+
+export default router
