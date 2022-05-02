@@ -15,14 +15,15 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 
 You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
 
-├── src                        // 源代码
-│   ├── assets                 // 主题 字体等静态资源
-│   ├── components             // 全局公用组件
-│   ├── lang                   // 国际化 language
-│   ├── router                 // 路由
-│   ├── store                  // 全局 store管理
-│   ├── styles                 // 全局样式
-│   ├── utils                  // 全局公用方法
-│   ├── views                   // view
-│   ├── App.vue                // 入口页面
-│   └── main.ts                // 入口 加载组件 初始化等
+##  项目结构
+├── src             // 源代码
+│  ├── assets         // 主题 字体等静态资源
+│  ├── components       // 全局公用组件
+│  ├── router         // 路由
+│  ├── lang          // 国际化 language
+│  ├── store          // 全局 store管理
+│  ├── styles         // 全局样式
+│  ├── utils          // 全局公用方法
+│  ├── views          // view
+│  ├── App.vue         // 入口页面
+│  └── main.ts         // 入口 加载组件 初始化等
