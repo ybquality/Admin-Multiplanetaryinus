@@ -23,51 +23,23 @@
           <div class="app-contact">CONTACT INFO : EMAIL 1908633182@qq.com</div>
         </div>
         <div class="screen-body-item">
-        <!-- 表单 -->
-          <!-- <div class="app-form">
-            <div class="app-form-group">
-              <input class="app-form-control" placeholder="NAME">
-            </div>
-            <div class="app-form-group">
-              <input class="app-form-control" placeholder="EMAIL">
-            </div>
-            <div class="app-form-group">
-              <input class="app-form-control" placeholder="CONTACT NO">
-            </div>
-            <div class="app-form-group message">
-              <input class="app-form-control" placeholder="MESSAGE">
-            </div>
-            <div class="app-form-group buttons">
-              <button class="app-form-button">登录</button>
-              <button class="app-form-button">注册</button>
-            </div>
-          </div> -->
           <el-form 
             :rules="rules" 
             ref="ruleFormRef"
-            :model="registerUser" 
-            class="app-form registerForm"
+            :model="loginUser" 
+            class="app-form loginForm"
           >
               <el-form-item prop="email" class="app-form-group">
-                  <el-input v-model="registerUser.email"  class="app-form-control" placeholder="EMAIL"></el-input>
-              </el-form-item>
-
-              <el-form-item prop="name" class="app-form-group">
-                  <el-input v-model="registerUser.user_name" class="app-form-control" placeholder="NAME"></el-input>
+                  <el-input v-model="loginUser.email"  class="app-form-control" placeholder="EMAIL"></el-input>
               </el-form-item>
 
               <el-form-item prop="password" class="app-form-group">
-                  <el-input v-model="registerUser.password" class="app-form-control" placeholder="PASSWORD"></el-input>
-              </el-form-item>
-
-              <el-form-item prop="password2" class="app-form-group">
-                  <el-input v-model="registerUser.password2" class="app-form-control" placeholder="PASSWORD2"></el-input>
+                  <el-input v-model="loginUser.password" class="app-form-control" placeholder="PASSWORD"></el-input>
               </el-form-item>
 
                 <div class="app-form-group buttons">
-                    <el-button @click="handleSubmit(ruleFormRef)" class="submit-btn">注册</el-button>
-                    <!-- <button class="app-form-button">登录</button> -->
-                    <router-link to="/login" class="app-form-link">登录</router-link>
+                    <el-button @click="handleSubmit(ruleFormRef)" class="submit-btn">登录</el-button>
+                    <router-link to="/register" class="app-form-link">注册</router-link>
                 </div>
           </el-form>
         </div>
@@ -80,51 +52,32 @@
 
 <script setup lang="ts">
 import { ref,reactive } from "vue";
-import { registerType, registerRulesType } from "../utils/types";//类型匹配封装文件
+import { registerType, registerRulesType, userType } from "../utils/types";//类型匹配封装文件
 
-import axios from "../utils/http";//axios封装
+import axios from "../utils/http";
 import { useRouter } from "vue-router";//引入路由
+import { useAuthStore } from "../store";
 
+import jwt_decode from "jwt-decode";//token解析模块
 import { FormInstance } from 'element-plus'
 import { ElSteps } from "element-plus/lib/components";
 const ruleFormRef = ref<FormInstance>()
 const router = useRouter();//使用路由
+const store = useAuthStore();//状态管理
 
-const registerUser = ref<registerType>({
+const loginUser = ref<registerType>({
     email: "",
-    user_name: "",
     password: "",
-    // password2: "321321"
 });
-
-//二次密码校验
-const validatePass2 = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('Please input the password again'))
-  } else if (value !== registerUser.value.password) {
-    callback(new Error("Two inputs don't match!"))
-  } else {
-    callback()
-  }
-};
 
 //表单校验规则 使用elmenp
 const rules = reactive<registerRulesType>({
   email: [{ required:true, type:"email", message:"邮箱格式不正确", trigger: 'blur' }],
-  user_name: [
-      { required:true, message:"用户名不能为空", trigger: 'change' },
-      { min:2, max:30, message:"长度不合法", trigger: 'blur' },
-    ],
   password: [
       { required:true, message:"密码不能为空", trigger: 'blur' },
       { min:6, max:30, message:"长度不合法", trigger: 'blur' },
-  ],
-  password2: [
-    //   { required: true,message:"密码不能为空", trigger: 'blur' },
-      { min:6,max:30,message:"长度在6到30个字符", trigger: 'blur' },
-      { validator: validatePass2, trigger: 'blur' }
-  ],
-})
+  ]
+});
 
 //表单提交
 const handleSubmit = (formEl: FormInstance | undefined) => {
@@ -132,18 +85,32 @@ const handleSubmit = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate( async (valid:boolean) => {
     if (valid) {
-      const {data} = await axios.post("/users/register",
-      registerUser.value
+      const {data} = await axios.post("/users/login",
+      loginUser.value
       );
 
-      console.log(data);
-      //@ts-ignore
-      ElMessage({
-        message: '注册成功.',
-        type: 'success',
-      });
+    const {success,token} = data.result
+    console.log(success,token);
 
-      router.push("/")
+        if(success && token){
+            localStorage.setItem("token",token)
+
+            //解析token
+            const decode:userType = jwt_decode(token);
+
+            ///存入pinia状态管理
+            //双!变成布尔类型
+            store.setAuth(!!decode)
+            store.setUser(decode);
+
+            //@ts-ignore
+            ElMessage({
+                message: '登录成功.',
+                type: 'success',
+            });
+
+            router.push("/")
+        }
     } else {
       console.log('error submit!')
       return false
@@ -324,14 +291,6 @@ input {
   border-bottom-color: #ddd;
 }
 
-.app-form-button {
-  background: none;
-  border: none;
-  color: #747ed1;
-  font-size: 14px;
-  cursor: pointer;
-  outline: none;
-}
 .app-form-link {
   margin-left: 10px;
   color: #747ed1;
@@ -339,11 +298,6 @@ input {
   cursor: pointer;
   outline: none;
 }
-
-.app-form-button:hover {
-  color: #747ed1;
-}
-
 
 
 @media screen and (max-width: 520px) {
