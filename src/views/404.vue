@@ -47,9 +47,7 @@
   </div>
 </a>
 </template>
-
 <script>
-
 </script>
 
 <style scoped>

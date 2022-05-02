@@ -20,7 +20,8 @@ export default defineConfig({
     //跨域
     server: {
       proxy: {
-        "/users":"http://localhost:8000"
+        "/users":"http://localhost:8000",
+        "/av":"http://localhost:8000"
       }
     }
 })

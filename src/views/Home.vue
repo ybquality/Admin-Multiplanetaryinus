@@ -44,17 +44,21 @@ body{
   height: 50px;
   /* position: fixed;
   z-index: 1; */
-  background-color: #24292f;
+  background-color: #ffff;
   color: #ffffffd9;
 }
 
 /* 侧边导航栏 */
 .el-aside{
-  background-color: #074c62;
+  background-color: #24292f;
   /* margin: 0;
   padding: 0; */
 }
 .el-col ul{
   border: none;
+}
+/* 隐藏侧边栏下拉菜单子集标题 */
+.el-menu-item-group__title{
+    display: none !important;
 }
 </style>

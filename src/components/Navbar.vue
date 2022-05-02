@@ -104,6 +104,6 @@ const logout = () => {
 }
 
 .el-dropdown{
-    color: #fff;
+    color: #000;
 }
 </style>

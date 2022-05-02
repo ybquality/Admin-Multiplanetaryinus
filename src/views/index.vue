@@ -5,7 +5,7 @@
             WELCOME: {{store.user.user_name}}
         </div>
         <div class="tolist">
-            占位符
+            TOLIST  占位符
         </div>
     </div>
 </template>
@@ -21,6 +21,7 @@ const store :any = useAuthStore();
 .index{
     display: flex;
     justify-content: space-between;
+    height: 592px;
 }
 .tolist{
     height: 400px;
