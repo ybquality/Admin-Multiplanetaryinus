@@ -3,22 +3,14 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from "./router";
 import { createPinia } from "pinia";
+import * as ElIcons from "@element-plus/icons-vue";//引入element icon图标
 
 const app = createApp(App)
 
 //将el图标做成全局引入
-import { CopyDocument,Coin,User,Grid } from "@element-plus/icons-vue";
-const icons = {
-    "CopyDocument":CopyDocument,
-    "Coin":Coin,
-    "User":User,
-    "Grid":Grid
+for( const name in ElIcons ){
+    app.component(name,(ElIcons as any)[name])
 }
-for (const [key,value] of Object.entries(icons)) {
-    app.component(key,value)
-}
-
-
 
 app.use(createPinia())
 app.use(router)
