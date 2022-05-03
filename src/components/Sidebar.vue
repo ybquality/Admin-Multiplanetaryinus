@@ -9,17 +9,8 @@
            background-color="#24292f"
            default-active="1"
           >
-            <!-- 首页 -->
-            <router-link to="/">
-                <el-menu-item index="1">
-                <el-icon><grid /></el-icon>
-                <span>首页</span>
-                </el-menu-item>
-            </router-link>
-            <!-- 动态加载遍历 -->
-            <!-- 根据menu下面的path进行数据遍历 -->
-            <template v-for="menu in menus" :key="menu.path">
-                 <el-sub-menu v-if="menu.children" :index="menu.path">
+            <template v-for="menu in menus" :key="menu.path" >
+                 <el-sub-menu v-if="menu.children" :index="menu.path" >
                      <template #title>
                          <el-icon>
                              <component :is="menu.icon"></component>
@@ -34,18 +25,17 @@
                          </router-link>
                      </el-menu-item-group>
                  </el-sub-menu>
+
+                <router-link  :to="menu.path" v-else>
+                    <el-menu-item >
+                        <el-icon>
+                            <component :is="menu.icon"></component>
+                        </el-icon>
+                        <span>{{menu.name}}</span>
+                    </el-menu-item>
+                </router-link>
             </template>
-            <!-- 文章管理 -->
-            <!-- <el-sub-menu index="2">
-                <template #title>
-                    <span>文章管理</span>
-                </template> -->
-                <!-- 文章管理下拉菜单 -->
-                <!-- <el-menu-item-group>
-                    <el-menu-item index="1-1">文章列表</el-menu-item>
-                    <el-menu-item index="1-2">新增文章</el-menu-item>
-                </el-menu-item-group>
-            </el-sub-menu> -->
+
           </el-menu>
       </el-col>
   </el-row>
@@ -55,6 +45,11 @@
 import {ref} from "vue";
 
 const menus = ref([
+    {
+        icon: "Grid",
+        name: "首页",
+        path: "/",
+    },
     {
         icon: "CopyDocument",
         name: "文章管理",
@@ -68,9 +63,6 @@ const menus = ref([
         icon: "Coin",
         name: "测试",
         path: "test",
-        children: [
-            {path: "testlist",name: "测试"}
-        ]
     },
     {
         icon: "User",
@@ -100,10 +92,13 @@ const menus = ref([
 </script>
 
 <style scoped>
+
+
 .el-menu-item-group{
     background-color: #141414;
 }
 .el-sub-menu .el-menu-item{
     padding-left: 50px !important;
+    /* padding-left: 20px !important; */
 }
 </style>

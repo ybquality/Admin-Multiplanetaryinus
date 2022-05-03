@@ -3,8 +3,9 @@
     <div class="common-layout">
     <el-container>
       <!-- 侧边栏 -->
-      <!-- <el-aside width="150px"></el-aside> -->
-      <Sidebar class="el-aside" style="width:200px;"></Sidebar>
+      <el-aside width="200px">
+        <Sidebar></Sidebar>
+      </el-aside>
       <el-container>
         <!-- 头部 -->
         <el-header>
@@ -22,7 +23,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import axios from "../utils/http";
-// import Navbar from "../components/Navbar.vue";
+import Navbar from "../components/Navbar.vue";
+import Sidebar from "../components/Sidebar.vue";
 
 
 onMounted(async () => {
